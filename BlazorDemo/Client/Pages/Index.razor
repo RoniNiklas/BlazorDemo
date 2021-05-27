@@ -1,0 +1,84 @@
+﻿@page "/"
+
+@using BlazorDemo.Shared
+@using MudBlazor
+@using BlazorDemo.Client.Stores
+
+@inject HttpClient Http
+@inject TodoStore TodoStore
+
+@implements IDisposable
+
+<h1>Todos</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+<div id="todo-wrapper">
+    <div id="button-wrapper">
+        <MudButton id="create-or-edit-button" Variant="Variant.Outlined" Color="Color.Primary">
+            <NavLink href="@("/todos/createOrEdit")">Create a new todo</NavLink>
+        </MudButton>
+    </div>
+
+    @if (TodoStore.LoadingTableData)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else if (TodoStore.TableVMs.Count() == 0)
+    {
+        <p><em>No results...</em></p>
+    } else {
+        <MudTable class="table" Items="TodoStore.TableVMs" Dense="true" Hover="false" Bordered="true" Striped="true">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">
+                    Todos
+                </MudText>
+                <MudToolBarSpacer />
+                <MudTextField 
+                    @bind-Value="searchString" 
+                    Placeholder="Search by area" 
+                    Adornment="Adornment.Start" 
+                    AdornmentIcon="@Icons.Material.Filled.Search" 
+                    IconSize="Size.Medium" 
+                    Class="mt-0"> </MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Assignee</MudTh>
+                <MudTh>Summary</MudTh>
+                <MudTh>Date Due</MudTh>
+                <MudTh>Finished</MudTh>
+                <MudTh>Edit</MudTh>
+                <MudTh>Delete</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                 <MudTd>@context.Assignee </MudTd>
+                 <MudTd>@context.Summary</MudTd>
+                 <MudTd>@(context.DueDate.HasValue ? context.DueDate.Value.ToShortDateString() : null)</MudTd >
+                 <MudTd>@context.Finished</MudTd>
+                 <MudTd>
+                    <NavLink href="@($"/todos/createOrEdit/{context.Id}")">
+                        <MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" Color="Color.Primary" />
+                    </NavLink>
+                </MudTd>
+                 <MudTd>
+                    <MudIconButton OnClick="(e => TodoStore.Delete(context.Id))" Icon="@Icons.Material.Filled.Delete" Color="Color.Primary"></MudIconButton>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+}
+</div>
+
+@code {
+    private string searchString = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        TodoStore.OnChange += StateHasChanged;
+        await TodoStore.FetchTableVMs();
+    }
+
+    public void Dispose()
+    {
+        TodoStore.OnChange -= StateHasChanged;
+    }
+}

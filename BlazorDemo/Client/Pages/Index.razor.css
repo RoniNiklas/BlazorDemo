@@ -1,0 +1,5 @@
+﻿#button-wrapper {
+    display: grid;
+    justify-content: end;
+    margin: 1rem;
+}

@@ -1,0 +1,39 @@
+﻿@using BlazorDemo.Client.Stores
+
+@inject TodoStore TodoStore
+
+@implements IDisposable
+
+<header> 
+    <section>
+        <NavLink href="/">
+            <MudIconButton Color="Color.Secondary" Size="Size.Large" Icon="@Icons.Material.Filled.Home">
+            </MudIconButton>
+        </NavLink>
+    
+        @if (TodoStore.LoadingTableData)
+        {
+            <div>
+                <MudText Color="Color.Secondary"> Loading ... </MudText>
+            </div>
+        } else
+        {
+            <div>
+                <MudText Color="Color.Secondary"> @TodoStore.UnfinishedTasks unfinished tasks! </MudText>
+             </div>
+        }
+    </section>
+</header>
+
+@code {        
+    protected override async Task OnInitializedAsync()
+    {
+        TodoStore.OnChange += StateHasChanged;  
+        await TodoStore.FetchTableVMs();
+    }
+
+    public void Dispose()
+    {
+        TodoStore.OnChange -= StateHasChanged;
+    }
+}
