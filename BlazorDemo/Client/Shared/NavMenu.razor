@@ -1,10 +1,11 @@
 ﻿@using BlazorDemo.Client.Stores
 
 @inject TodoStore TodoStore
+@inject IJSRuntime JS
 
 @implements IDisposable
 
-<header> 
+<header>
     <section>
         <NavLink href="/">
             <MudIconButton Color="Color.Secondary" Size="Size.Large" Icon="@Icons.Material.Filled.Home">
@@ -12,22 +13,27 @@
         </NavLink>
 
         <MudText Color="Color.Secondary">Hello @UserName</MudText>
-    
+
         @if (TodoStore.LoadingTableData)
         {
             <div>
                 <MudText Color="Color.Secondary"> Loading ... </MudText>
             </div>
-        } else
+        }
+        else
         {
             <div>
                 <MudText Color="Color.Secondary"> @TodoStore.UnfinishedTasks unfinished tasks! </MudText>
-             </div>
+            </div>
+            <MudButton 
+                 Color="Color.Secondary" 
+                 StartIcon="@Icons.Material.Filled.Alarm" 
+                 OnClick="(e => JavascriptTest())"></MudButton>
         }
     </section>
 </header>
 
-@code {        
+@code {
     [Parameter]
     public string UserName { get; set; } = "";
 
@@ -39,5 +45,12 @@
     public void Dispose()
     {
         TodoStore.OnChange -= StateHasChanged;
+    }
+
+    public async void JavascriptTest ()
+    {
+        var result = await JS.InvokeAsync<string>("ReturnText", "This is just to test js interop");
+        Console.WriteLine(result);
+        await JS.InvokeVoidAsync("AlertWithText", "This is just to test js interop");
     }
 }

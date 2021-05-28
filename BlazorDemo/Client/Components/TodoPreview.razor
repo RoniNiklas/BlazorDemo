@@ -1,0 +1,23 @@
+﻿@using BlazorDemo.Shared
+ 
+<h2>
+    Preview:
+</h2>
+<div id="preview-wrapper">
+    <div>
+        <strong>Assignee: </strong><span>@Todo.Assignee</span>
+    </div>
+    <div>
+        <strong>Summary: </strong><span>@Todo.Summary</span>
+    </div>
+    <div>
+        <strong>Details: </strong><span>@Todo.Details</span>
+    </div>
+    <div>
+        <strong>Due Date: </strong><span>@(Todo.DueDate.HasValue ? Todo.DueDate.Value.ToShortDateString() : "")</span>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public TodoDetailsVM Todo { get; set; } = new TodoDetailsVM();
+}

@@ -17,8 +17,4 @@
     <Watch Include="**\*.cs;**\*.css" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Watch Remove="Stores\TodoStore.cs" />
-  </ItemGroup>
-
 </Project>

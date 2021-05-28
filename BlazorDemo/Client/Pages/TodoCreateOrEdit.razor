@@ -3,6 +3,7 @@
 @using BlazorDemo.Shared
 @using MudBlazor
 @using System.Globalization
+@using BlazorDemo.Client.Components 
 
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
@@ -19,62 +20,49 @@ else if (Todo == null)
 {
     <p><em>Not found!</em></p>
 } else {
-    <EditForm Model="@Todo" OnValidSubmit="OnValidSubmit">
-        <DataAnnotationsValidator />
-        <MudCard>
-            <MudCardContent>
-                <MudTextField Label="Assignee" HelperText="Max. 30 characters" Required="true"
-                              @bind-Value="Todo.Assignee" For="@(() => Todo.Assignee)" />
+<EditForm Model="@Todo" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="Assignee" HelperText="Max. 30 characters" Required="true"
+                          @bind-Value="Todo.Assignee" For="@(() => Todo.Assignee)" />
 
-                <MudTextField Label="Summary" HelperText="Max. 30 characters" Required="true"
-                              @bind-Value="Todo.Summary" For="@(() => Todo.Summary)" />
+            <MudTextField Label="Summary" HelperText="Max. 30 characters" Required="true"
+                          @bind-Value="Todo.Summary" For="@(() => Todo.Summary)" />
 
-                <MudTextField Label="Details" HelperText="Max 100 characters" Required="true"
-                              @bind-Value="Todo.Details" For="@(() => Todo.Details)" />
+            <MudTextField Label="Details" HelperText="Max 100 characters" Required="true"
+                          @bind-Value="Todo.Details" For="@(() => Todo.Details)" />
 
-                <MudDatePicker Label="Date Assigned" Editable="true" Culture="@FinnishCulture" DateFormat="dd/MM/yyyy" 
-                              @bind-Date="Todo.DateAssigned" /> 
+            <MudDatePicker Label="Date Assigned" Editable="true" Culture="@FinnishCulture" DateFormat="dd/MM/yyyy"
+                           @bind-Date="Todo.DateAssigned" />
 
-               <MudDatePicker Label="Due Date" Editable="true" Culture="@FinnishCulture" DateFormat="dd/MM/yyyy" Required="true"
-                              @bind-Date="Todo.DueDate" /> 
-                               
-                <MudDatePicker Label="Date Finished" Editable="true" Culture="@FinnishCulture" DateFormat="dd/MM/yyyy"
-                              @bind-Date="Todo.DateFinished" /> 
+            <MudDatePicker Label="Due Date" Editable="true" Culture="@FinnishCulture" DateFormat="dd/MM/yyyy" Required="true"
+                           @bind-Date="Todo.DueDate" />
 
-            </MudCardContent>
-            <MudCardActions>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
-                    Save
-                </MudButton>
-            </MudCardActions>
-        </MudCard>
+            <MudDatePicker Label="Date Finished" Editable="true" Culture="@FinnishCulture" DateFormat="dd/MM/yyyy"
+                           @bind-Date="Todo.DateFinished" />
 
-         <MudExpansionPanels>
-             <MudExpansionPanel Text="Validation Summary"  IsExpanded="true">
-                 <MudText Color="@Color.Error">
-                     <ValidationSummary />
-                 </MudText>
-             </MudExpansionPanel>
-         </MudExpansionPanels>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
+                Save
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
 
-         <h2>
-             Preview:
-         </h2>
-         <div id="preview-wrapper">
-             <div>
-                 <strong>Assignee: </strong><span>@Todo.Assignee</span>
-             </div>
-             <div>
-                 <strong>Summary: </strong><span>@Todo.Summary</span>
-             </div>
-             <div>
-                 <strong>Details: </strong><span>@Todo.Details</span>
-             </div>
-             <div>
-                 <strong>Due Date: </strong><span>@(Todo.DueDate.HasValue ? Todo.DueDate.Value.ToShortDateString() : "")</span>
-             </div>
-         </div>
-    </EditForm>
+    <MudExpansionPanels>
+        <MudExpansionPanel HideIcon="true" Text="Validation Summary" IsExpanded="true">
+            <MudText Color="@Color.Error">
+                <ValidationSummary />
+            </MudText>
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+
+    <input @bind-value="Todo.Assignee" />
+
+    <TodoPreview Todo="Todo" />
+
+</EditForm>
 }
 
 @code {
