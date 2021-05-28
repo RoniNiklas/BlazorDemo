@@ -10,6 +10,8 @@
             <MudIconButton Color="Color.Secondary" Size="Size.Large" Icon="@Icons.Material.Filled.Home">
             </MudIconButton>
         </NavLink>
+
+        <MudText Color="Color.Secondary">Hello @UserName</MudText>
     
         @if (TodoStore.LoadingTableData)
         {
@@ -26,10 +28,12 @@
 </header>
 
 @code {        
-    protected override async Task OnInitializedAsync()
+    [Parameter]
+    public string UserName { get; set; } = "";
+
+    protected override void OnInitialized()
     {
-        TodoStore.OnChange += StateHasChanged;  
-        await TodoStore.FetchTableVMs();
+        TodoStore.OnChange += StateHasChanged;
     }
 
     public void Dispose()

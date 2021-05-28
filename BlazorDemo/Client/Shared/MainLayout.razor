@@ -1,7 +1,11 @@
-﻿@inherits LayoutComponentBase
+﻿@using BlazorDemo.Client.Stores
+
+@inherits LayoutComponentBase
+
+@inject TodoStore TodoStore
 
 <div class="page">
-     <NavMenu />
+    <NavMenu UserName="Make" />
 
     <main>
         <div class="content m-4">
@@ -9,3 +13,10 @@
         </div>
     </main>
 </div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await TodoStore.FetchTableVMs();
+    }
+}

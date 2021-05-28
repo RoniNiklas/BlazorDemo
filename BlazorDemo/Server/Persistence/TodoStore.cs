@@ -22,8 +22,8 @@ namespace BlazorDemo.Server.Persistence
         {
             if (entity.Id.HasValue)
             {
-                var todo = GetById(entity.Id.Value);
-                todo = entity;
+                var index = Todos.FindIndex(item => item.Id == entity.Id);
+                Todos[index] = entity;
             } else
             {
                 entity.Id = NextIndex++;

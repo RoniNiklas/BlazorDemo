@@ -23,19 +23,19 @@ else if (Todo == null)
         <DataAnnotationsValidator />
         <MudCard>
             <MudCardContent>
-                <MudTextField Label="Assignee" HelperText="Max. 30 characters" 
+                <MudTextField Label="Assignee" HelperText="Max. 30 characters" Required="true"
                               @bind-Value="Todo.Assignee" For="@(() => Todo.Assignee)" />
 
-                <MudTextField Label="Summary" HelperText="Max. 30 characters" 
+                <MudTextField Label="Summary" HelperText="Max. 30 characters" Required="true"
                               @bind-Value="Todo.Summary" For="@(() => Todo.Summary)" />
 
-                <MudTextField Label="Details" HelperText="Max 100 characters" 
+                <MudTextField Label="Details" HelperText="Max 100 characters" Required="true"
                               @bind-Value="Todo.Details" For="@(() => Todo.Details)" />
 
-                <MudDatePicker Label="Date Assigned" Editable="true" Culture="@FinnishCulture" DateFormat="dd/MM/yyyy"
+                <MudDatePicker Label="Date Assigned" Editable="true" Culture="@FinnishCulture" DateFormat="dd/MM/yyyy" 
                               @bind-Date="Todo.DateAssigned" /> 
 
-               <MudDatePicker Label="Due Date" Editable="true" Culture="@FinnishCulture" DateFormat="dd/MM/yyyy"
+               <MudDatePicker Label="Due Date" Editable="true" Culture="@FinnishCulture" DateFormat="dd/MM/yyyy" Required="true"
                               @bind-Date="Todo.DueDate" /> 
                                
                 <MudDatePicker Label="Date Finished" Editable="true" Culture="@FinnishCulture" DateFormat="dd/MM/yyyy"
@@ -57,9 +57,23 @@ else if (Todo == null)
              </MudExpansionPanel>
          </MudExpansionPanels>
 
-         <input @bind-value="Todo.Assignee" />
-         <input type="date" @bind-value="Todo.DateAssigned" />
-         <InputDate @bind-Value="Todo.DateAssigned" />
+         <h2>
+             Preview:
+         </h2>
+         <div id="preview-wrapper">
+             <div>
+                 <strong>Assignee: </strong><span>@Todo.Assignee</span>
+             </div>
+             <div>
+                 <strong>Summary: </strong><span>@Todo.Summary</span>
+             </div>
+             <div>
+                 <strong>Details: </strong><span>@Todo.Details</span>
+             </div>
+             <div>
+                 <strong>Due Date: </strong><span>@(Todo.DueDate.HasValue ? Todo.DueDate.Value.ToShortDateString() : "")</span>
+             </div>
+         </div>
     </EditForm>
 }
 
@@ -68,7 +82,6 @@ else if (Todo == null)
     public int? Id { get; set; } 
     private TodoDetailsVM? Todo { get; set; }
     private bool Loading = true;
-    private bool notFound = false;
     private CultureInfo FinnishCulture = CultureInfo.GetCultureInfo("fi");
 
     protected override async Task OnInitializedAsync()
